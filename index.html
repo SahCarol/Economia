@@ -163,6 +163,7 @@
         .intro-screen {
             padding: 32px 28px;
             text-align: center;
+            background: #fef8ec;
         }
 
         .intro-icon {
@@ -432,7 +433,7 @@
 </div>
 
 <script>
-    // ========== JOGO DE DECISÕES COM INTRODUÇÃO ==========
+    // ========== JOGO DE DECISÕES CORRIGIDO ==========
     
     let currentQuestionIndex = 0;
     let score = 0;
@@ -522,14 +523,20 @@
         }
     ];
     
-    document.getElementById("totalQuestions").innerText = questions.length;
-    
     function updateIndicatorsUI() {
-        document.getElementById("pibValue").innerText = Math.round(indicators.pib);
-        document.getElementById("infValue").innerText = indicators.inflacao.toFixed(1) + "%";
-        document.getElementById("desValue").innerText = indicators.desemprego.toFixed(1) + "%";
-        document.getElementById("popValue").innerText = Math.round(indicators.popularidade) + "%";
-        document.getElementById("scoreCounter").innerText = score;
+        const pibEl = document.getElementById("pibValue");
+        const infEl = document.getElementById("infValue");
+        const desEl = document.getElementById("desValue");
+        const popEl = document.getElementById("popValue");
+        const scoreEl = document.getElementById("scoreCounter");
+        const totalEl = document.getElementById("totalQuestions");
+        
+        if (pibEl) pibEl.innerText = Math.round(indicators.pib);
+        if (infEl) infEl.innerText = indicators.inflacao.toFixed(1) + "%";
+        if (desEl) desEl.innerText = indicators.desemprego.toFixed(1) + "%";
+        if (popEl) popEl.innerText = Math.round(indicators.popularidade) + "%";
+        if (scoreEl) scoreEl.innerText = score;
+        if (totalEl) totalEl.innerText = questions.length;
     }
     
     function applyIndicatorChanges(effect) {
@@ -574,7 +581,6 @@
         
         const economiaSaudavel = (pibFinal >= 85 && inflacaoFinal <= 9 && desempregoFinal <= 11);
         const popularidadeAceitavel = popularidadeFinal >= 40;
-        const desempenhoBom = aproveitamento >= 60;
         
         if (aproveitamento >= 70 && economiaSaudavel && popularidadeAceitavel) {
             status = "✅ MANDATO RENOVADO! ✅";
@@ -714,12 +720,30 @@
         loadQuestion();
     }
     
-    // Controle da tela de introdução
-    document.getElementById("startGameBtn").addEventListener("click", () => {
+    function startGame() {
+        // Resetar todos os valores
+        currentQuestionIndex = 0;
+        score = 0;
+        answerLocked = false;
+        gameFinished = false;
+        indicators = {
+            pib: 100,
+            inflacao: 6.0,
+            desemprego: 8.5,
+            popularidade: 55
+        };
+        
+        // Esconder tela de introdução e mostrar o jogo
         document.getElementById("introScreen").style.display = "none";
         document.getElementById("gameScreen").style.display = "block";
-        resetGame(); // Inicia o jogo com valores zerados/limpos
-    });
+        
+        // Atualizar UI e carregar primeira pergunta
+        updateIndicatorsUI();
+        loadQuestion();
+    }
+    
+    // Configurar eventos
+    document.getElementById("startGameBtn").addEventListener("click", startGame);
     
     document.getElementById("closeModalBtn").addEventListener("click", () => {
         document.getElementById("explanationModal").style.display = "none";
@@ -732,7 +756,12 @@
         }
     });
     
-    // Inicialização (só prepara, mas não carrega o jogo antes do start)
+    document.getElementById("resetBtn").addEventListener("click", () => {
+        resetGame();
+    });
+    
+    // Pré-configurar o total de perguntas
+    document.getElementById("totalQuestions").innerText = questions.length;
     updateIndicatorsUI();
 </script>
 </body>
