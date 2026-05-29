@@ -1,1 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Ministério da Economia - Simulador Interativo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+        }
 
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #0f2b2b 0%, #1a4a4a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Dashboard principal */
+        .simulator {
+            max-width: 1100px;
+            width: 100%;
+            background: #fefaf0;
+            border-radius: 48px;
+            box-shadow: 0 30px 45px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,200,0.6);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        /* Header com indicadores */
+        .indicators {
+            background: #0b2629;
+            padding: 20px 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+            gap: 16px;
+            border-bottom: 4px solid #f5b642;
+        }
+
+        .indicator-card {
+            background: #1b4449;
+            border-radius: 28px;
+            padding: 12px 16px;
+            color: #ffe1a0;
+            box-shadow: inset 0 1px 3px #3a7a7a, 0 4px 8px rgba(0,0,0,0.2);
+            transition: 0.1s linear;
+        }
+
+        .indicator-name {
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            font-weight: 500;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .indicator-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ffdf80;
+            line-height: 1;
+            margin-top: 8px;
+        }
+
+        .trend {
+            font-size: 0.7rem;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        /* Área do evento */
+        .event-area {
+            padding: 28px 28px 20px;
+            background: #fff7ea;
+        }
+
+        .event-badge {
+            background: #e6d5b3;
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #735e2c;
+            margin-bottom: 15px;
+        }
+
+        .event-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #224e52;
+            margin-bottom: 12px;
+        }
+
+        .event-desc {
+            font-size: 1.1rem;
+            color: #3c5a5e;
+            line-height: 1.4;
+            margin-bottom: 28px;
+            padding: 10px 0;
+            border-left: 5px solid #f3b33d;
+            padding-left: 20px;
+        }
+
+        /* Opções de decisão */
+        .decisions {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+
+        .decision-btn {
+            background: #efe2ca;
+            border: 2px solid #dabb84;
+            border-radius: 100px;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #2f5156;
+        }
+
+        .decision-btn:hover {
+            background: #ffefcf;
+            transform: scale(0.99);
+            border-color: #e7a530;
+        }
+
+        .decision-letter {
+            background: #c07d32;
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Lição & Feedback */
+        .lesson-box {
+            background: #e8f0e7;
+            border-radius: 32px;
+            padding: 18px 20px;
+            margin-top: 8px;
+            border-left: 10px solid #4d8b6e;
+            font-size: 0.9rem;
+            color: #2b5a49;
+        }
+
+        .next-button {
+            background: #f3bc5c;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 60px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: 0.1s;
+            color: #293f42;
+            box-shadow: 0 5px 0 #a2641a;
+        }
+
+        .next-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #a2641a;
+        }
+
+        .reset-btn {
+            background: #bc7a48;
+            color: white;
+            box-shadow: 0 4px 0 #6b3c1a;
+            margin-bottom: 10px;
+        }
+
+        .game-footer {
+            padding: 16px 28px 28px;
+            background: #fff7ea;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .indicator-value { font-size: 1.6rem; }
+            .event-title { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="simulator" id="gameRoot">
+    <div class="indicators" id="indicatorsPanel">
+        <!-- dinâmico via js -->
+    </div>
+    <div class="event-area" id="eventArea">
+        <div class="event-badge" id="eventBadge">📉 COYUNTURA ECONÔMICA</div>
+        <div class="event-title" id="eventTitle">Carregando cenário...</div>
+        <div class="event-desc" id="eventDesc"></div>
+        <div class="decisions" id="decisionsContainer"></div>
+        <div class="lesson-box" id="lessonBox">
+            💡 Clique em uma decisão para ver a análise econômica (baseada no livro Unifatecie).
+        </div>
+        <button class="next-button" id="nextEventBtn">▶ AVANÇAR PARA PRÓXIMO EVENTO</button>
+        <button class="next-button reset-btn" id="resetGameBtn">🔄 REINICIAR JORNADA</button>
+    </div>
+</div>
+
+<script>
+    // ----- SIMULADOR DE GESTÃO ECONÔMICA (Dinâmico, decisões afetam indicadores) -----
+    // baseado no conteúdo: história, micro, macro, políticas, escassez, keynes, etc.
+    
+    let gameState = {
+        pib: 100,          // PIB indexado
+        inflacao: 6.0,    // % 
+        desemprego: 8.5,  // %
+        popularidade: 55, // %
+    };
+    
+    let currentEventIndex = 0;
+    let waitingForNext = false;
+    let lastFeedback = "";
+    
+    // Eventos interativos (cada um com contexto real de economia)
+    const events = [
+        {
+            title: "🔥 ALTA DA INFLAÇÃO",
+            desc: "Os preços estão subindo há três meses consecutivos. A inflação anual já ultrapassa 9% e a população perde poder de compra. O que você faz como ministro da economia?",
+            options: [
+                { text: "Aumentar a taxa básica de juros (Selic)", effect: { pib: -2, inflacao: -2.2, desemprego: +0.8, popularidade: -3 }, lesson: "✅ Política Monetária Contracionista (Keynes/Banco Central): Juros mais altos reduzem demanda, controlando a inflação, mas desaceleram o PIB e aumentam desemprego no curto prazo. Referência: Unidade IV - instrumentos de política macroeconômica." },
+                { text: "Expandir gastos públicos e cortar impostos", effect: { pib: +3, inflacao: +1.8, desemprego: -1.2, popularidade: +5 }, lesson: "⚠️ Política fiscal expansionista estimula demanda, mas pode piorar a inflação de demanda. Como diz o livro: inflação de demanda ocorre por excesso de moeda. Esta medida é arriscada!" },
+                { text: "Congelamento geral de preços e salários", effect: { pib: -4, inflacao: -1.0, desemprego: +2.0, popularidade: -8 }, lesson: "📉 Controles de preços geram escassez e desorganização (mercado negro). O livro aponta que indexação pode perpetuar inflação; congelamento raramente funciona sem ajustes estruturais." },
+                { text: "Não intervir (laissez-faire)", effect: { pib: -1, inflacao: +1.2, desemprego: +0.5, popularidade: -2 }, lesson: "🏛️ Visão liberal (Adam Smith): o mercado se autorregula, mas Keynes demonstrou que sem intervenção, crises podem se aprofundar. Escassez e desemprego podem piorar." }
+            ]
+        },
+        {
+            title: "📉 RECESSÃO E DESEMPREGO",
+            desc: "O PIB caiu pelo segundo trimestre seguido, desemprego em 11% e consumo em queda. Empresas fechando. Como reagir?",
+            options: [
+                { text: "Aumentar gastos do governo em infraestrutura", effect: { pib: +4, inflacao: +0.8, desemprego: -1.5, popularidade: +4 }, lesson: "🏗️ Política fiscal keynesiana: em recessão, o Estado deve atuar como regulador da demanda agregada. Geração de empregos e renda, como ensina a Teoria Geral do Emprego, Juros e Moeda." },
+                { text: "Reduzir impostos para empresas e famílias", effect: { pib: +2.5, inflacao: +0.4, desemprego: -0.8, popularidade: +3 }, lesson: "✅ Estímulo fiscal pelo lado da oferta. Pode melhorar investimento, mas efeito mais lento. Unidade II: o problema da escassez exige escolhas." },
+                { text: "Aumentar juros para atrair capital externo", effect: { pib: -2, inflacao: -0.5, desemprego: +1.2, popularidade: -5 }, lesson: "⚠️ Juros altos em recessão aprofunda a queda da atividade, aumenta desemprego. Inadequado para o momento (contracionista)." },
+                { text: "Política de rendas: subsídios diretos aos pobres", effect: { pib: +1, inflacao: +0.3, desemprego: -0.4, popularidade: +6 }, lesson: "🏷️ Política de redistribuição de renda ajuda a reduzir desigualdade e manter demanda, sem grande risco inflacionário. Capítulo IV - Política de Rendas." }
+            ]
+        },
+        {
+            title: "💱 CRISE CAMBIAL E EXTERNA",
+            desc: "A moeda nacional desvalorizou 20% nos últimos meses, importações encarecidas e dívida externa cresce. O que fazer?",
+            options: [
+                { text: "Intervir no câmbio (vender reservas internacionais)", effect: { pib: -0.5, inflacao: -0.8, desemprego: 0, popularidade: 0 }, lesson: "🌎 Política cambial ativa: O BC vende dólares para valorizar a moeda, segurando a inflação importada. Desvantagem: perda de reservas. Unidade IV - Política Cambial." },
+                { text: "Aumentar tarifas de importação", effect: { pib: -1, inflacao: +0.6, desemprego: +0.3, popularidade: -2 }, lesson: "🚧 Medida protecionista pode gerar retaliações e piorar a eficiência produtiva. Conteúdo de comércio internacional." },
+                { text: "Aumentar a taxa de juros para atrair capitais", effect: { pib: -1.8, inflacao: -1.0, desemprego: +1.0, popularidade: -4 }, lesson: "💰 Atrai capital externo e pode valorizar o câmbio, porém juros altos prejudicam investimento interno (trade-off)." },
+                { text: "Acordo comercial + incentivo às exportações", effect: { pib: +2, inflacao: -0.2, desemprego: -0.6, popularidade: +2 }, lesson: "📦 Política comercial ativa: diversificar parcerias e estimular setores competitivos. Baseado na teoria das vantagens comparativas e política comercial." }
+            ]
+        },
+        {
+            title: "⚖️ DESIGUALDADE E ESCASSEZ",
+            desc: "Apesar do PIB estável, a concentração de renda aumentou muito. Faltam recursos para saúde e educação. Como agir?",
+            options: [
+                { text: "Reforma tributária progressiva (aumentar impostos sobre ricos)", effect: { pib: 0, inflacao: 0.1, desemprego: -0.2, popularidade: +7 }, lesson: "🏛️ Justiça fiscal e função redistributiva do Estado. O livro menciona que o governo pode corrigir falhas de mercado e promover bem-estar." },
+                { text: "Cortar gastos sociais para equilibrar contas", effect: { pib: -2, inflacao: -0.3, desemprego: +1, popularidade: -10 }, lesson: "📉 Medida recessiva que penaliza os mais pobres, agravando a escassez social. Caminho oposto ao objetivo de bem-estar." },
+                { text: "Programa de renda básica financiado por impostos", effect: { pib: +1.5, inflacao: +0.5, desemprego: -0.5, popularidade: +8 }, lesson: "🤝 Reduz pobreza e estimula consumo. O desafio é controlar inflação, mas aumenta capital humano no longo prazo." },
+                { text: "Privatizações e redução do estado", effect: { pib: +1, inflacao: -0.2, desemprego: +0.4, popularidade: -3 }, lesson: "📊 Visão liberal: mais eficiência alocativa, mas pode ampliar desigualdade sem programas sociais." }
+            ]
+        },
+        {
+            title: "🏦 CHOQUE DE OFERTA (PETRÓLEO)",
+            desc: "O preço do petróleo dispara no mercado internacional. Os custos de produção aumentam em toda a economia. Qual política adotar?",
+            options: [
+                { text: "Subsidiar combustíveis e energia", effect: { pib: -1, inflacao: -1.2, desemprego: +0.2, popularidade: +2 }, lesson: "⛽ Política fiscal de subsídios reduz impacto inflacionário, mas eleva gasto público. Pode gerar déficit." },
+                { text: "Aumentar juros para combater inflação de custos", effect: { pib: -3, inflacao: -0.5, desemprego: +1.5, popularidade: -6 }, lesson: "⚠️ Inflação de custos não responde bem ao aperto monetário (pode gerar estagflação). Conforme unidade IV - tipos de inflação." },
+                { text: "Desvalorizar o câmbio para estimular exportações", effect: { pib: +1, inflacao: +1.0, desemprego: -0.1, popularidade: -1 }, lesson: "📉 Pode piorar inflação importada. Recomendado apenas se déficit externo for grave." },
+                { text: "Liberalização de importação e controle temporário de preços", effect: { pib: 0, inflacao: -0.9, desemprego: +0.3, popularidade: 0 }, lesson: "🏷️ Combina medidas para conter choque de oferta. Economia aprende com a crise do petróleo dos anos 1970." }
+            ]
+        }
+    ];
+    
+    // helper para atualizar interface com valores atuais
+    function updateIndicatorsUI() {
+        const panel = document.getElementById("indicatorsPanel");
+        panel.innerHTML = `
+            <div class="indicator-card"><div class="indicator-name">📈 PIB (Produto Interno)</div><div class="indicator-value">${Math.round(gameState.pib)}</div><div class="trend">base 100</div></div>
+            <div class="indicator-card"><div class="indicator-name">🔥 Inflação (IPCA)</div><div class="indicator-value">${gameState.inflacao.toFixed(1)}%</div><div class="trend">meta 3%</div></div>
+            <div class="indicator-card"><div class="indicator-name">👥 Desemprego</div><div class="indicator-value">${gameState.desemprego.toFixed(1)}%</div><div class="trend">pleno ~5%</div></div>
+            <div class="indicator-card"><div class="indicator-name">👍 Aprovação</div><div class="indicator-value">${Math.round(gameState.popularidade)}%</div><div class="trend">popularidade</div></div>
+        `;
+    }
+    
+    function applyEffect(effect) {
+        // atualiza cada indicador com limites realistas
+        let newPib = gameState.pib + (effect.pib || 0);
+        let newInf = gameState.inflacao + (effect.inflacao || 0);
+        let newDes = gameState.desemprego + (effect.desemprego || 0);
+        let newPop = gameState.popularidade + (effect.popularidade || 0);
+        
+        gameState.pib = Math.min(200, Math.max(40, newPib));
+        gameState.inflacao = Math.min(35, Math.max(0.5, newInf));
+        gameState.desemprego = Math.min(25, Math.max(2.5, newDes));
+        gameState.popularidade = Math.min(100, Math.max(0, newPop));
+        
+        updateIndicatorsUI();
+    }
+    
+    function loadEvent(index) {
+        if (index >= events.length) {
+            // Fim do jogo: vitória
+            document.getElementById("eventTitle").innerHTML = "🏆 MANDATO CONCLUÍDO 🏆";
+            document.getElementById("eventDesc").innerHTML = `Você administrou a economia com base nos conceitos do livro da Unifatecie. Seus indicadores finais: PIB ${Math.round(gameState.pib)} | Inflação ${gameState.inflacao.toFixed(1)}% | Desemprego ${gameState.desemprego.toFixed(1)}% | Popularidade ${Math.round(gameState.popularidade)}%. Parabéns, Ministro!`;
+            document.getElementById("decisionsContainer").innerHTML = "";
+            document.getElementById("lessonBox").innerHTML = "🎓 Você aplicou teorias desde Mercantilismo, Keynes, Micro e Macroeconomia. O país reconhece seu esforço!";
+            const nextBtn = document.getElementById("nextEventBtn");
+            nextBtn.innerText = "🏁 REINICIAR SIMULAÇÃO";
+            nextBtn.onclick = () => resetGame();
+            waitingForNext = false;
+            return;
+        }
+        
+        const ev = events[index];
+        document.getElementById("eventTitle").innerHTML = ev.title;
+        document.getElementById("eventDesc").innerHTML = ev.desc;
+        const optionsDiv = document.getElementById("decisionsContainer");
+        optionsDiv.innerHTML = "";
+        ev.options.forEach((opt, idx) => {
+            const btn = document.createElement("div");
+            btn.className = "decision-btn";
+            btn.innerHTML = `<div class="decision-letter">${String.fromCharCode(65+idx)}</div><div>${opt.text}</div>`;
+            btn.addEventListener("click", () => {
+                if (waitingForNext) return;
+                // aplicar efeitos
+                applyEffect(opt.effect);
+                // mostrar lição do livro
+                document.getElementById("lessonBox").innerHTML = `📖 LIÇÃO DO LIVRO: ${opt.lesson}`;
+                waitingForNext = true;
+                // desabilitar novos cliques até próximo
+                const allDecisions = document.querySelectorAll(".decision-btn");
+                allDecisions.forEach(d => d.style.opacity = "0.5");
+                // habilitar botão next
+                const nextBtn = document.getElementById("nextEventBtn");
+                nextBtn.disabled = false;
+                nextBtn.style.background = "#f3bc5c";
+            });
+            optionsDiv.appendChild(btn);
+        });
+        
+        waitingForNext = false;
+        const nextBtn = document.getElementById("nextEventBtn");
+        nextBtn.disabled = false;
+        nextBtn.innerText = "▶ AVANÇAR PARA PRÓXIMO EVENTO";
+        nextBtn.onclick = () => {
+            if (!waitingForNext) {
+                document.getElementById("lessonBox").innerHTML = "⚠️ Você precisa tomar uma decisão antes de avançar!";
+                return;
+            }
+            currentEventIndex++;
+            loadEvent(currentEventIndex);
+        };
+        // resetar estilo
+        const allDecisions = document.querySelectorAll(".decision-btn");
+        allDecisions.forEach(d => d.style.opacity = "1");
+        waitingForNext = false;
+        document.getElementById("lessonBox").innerHTML = "💡 Escolha uma decisão. Cada alternativa altera os indicadores e traz um conceito direto do seu material didático.";
+    }
+    
+    function resetGame() {
+        gameState = {
+            pib: 100,
+            inflacao: 6.0,
+            desemprego: 8.5,
+            popularidade: 55,
+        };
+        currentEventIndex = 0;
+        waitingForNext = false;
+        updateIndicatorsUI();
+        loadEvent(0);
+        document.getElementById("nextEventBtn").disabled = false;
+        document.getElementById("nextEventBtn").innerText = "▶ AVANÇAR PARA PRÓXIMO EVENTO";
+    }
+    
+    // inicio
+    updateIndicatorsUI();
+    loadEvent(0);
+    document.getElementById("resetGameBtn").addEventListener("click", resetGame);
+</script>
+</body>
+</html>
