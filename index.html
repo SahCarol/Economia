@@ -633,4 +633,107 @@
         `;
         document.getElementById("optionsContainer").innerHTML = "";
         const nextBtn = document.getElementById("nextBtn");
-        nextBtn.innerText = "
+        nextBtn.innerText = "🔄 REINICIAR MANDATO";
+        nextBtn.disabled = false;
+        nextBtn.onclick = () => resetGame();
+    }
+    
+    function loadQuestion() {
+        if (currentQuestionIndex >= questions.length) {
+            avaliarFinal();
+            gameFinished = true;
+            return;
+        }
+        
+        answerLocked = false;
+        const q = questions[currentQuestionIndex];
+        document.getElementById("questionText").innerHTML = q.text;
+        document.getElementById("contextText").innerHTML = q.context;
+        
+        const optionsDiv = document.getElementById("optionsContainer");
+        optionsDiv.innerHTML = "";
+        
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement("div");
+            btn.className = "option-btn";
+            const prefix = String.fromCharCode(65 + idx);
+            btn.innerHTML = `<div class="option-prefix">${prefix}</div><div>${opt.text}</div>`;
+            
+            btn.addEventListener("click", () => {
+                if (answerLocked || gameFinished) return;
+                answerLocked = true;
+                
+                const isCorrect = opt.correct;
+                if (isCorrect) {
+                    score++;
+                    updateIndicatorsUI();
+                }
+                
+                applyIndicatorChanges(opt.effect);
+                
+                const effectDesc = `📈 PIB: ${opt.effect.pib >= 0 ? '+' : ''}${opt.effect.pib} | 🔥 Inflação: ${opt.effect.inflacao >= 0 ? '+' : ''}${opt.effect.inflacao}% | 👥 Desemprego: ${opt.effect.desemprego >= 0 ? '+' : ''}${opt.effect.desemprego}% | 👍 Popularidade: ${opt.effect.popularidade >= 0 ? '+' : ''}${opt.effect.popularidade}%`;
+                
+                showModal(isCorrect ? "Acertou!" : "Errou!", opt.explanation, isCorrect, effectDesc);
+                
+                document.querySelectorAll(".option-btn").forEach(btn => {
+                    btn.classList.add("disabled-option");
+                });
+                
+                const nextBtn = document.getElementById("nextBtn");
+                nextBtn.disabled = false;
+            });
+            
+            optionsDiv.appendChild(btn);
+        });
+        
+        const nextBtn = document.getElementById("nextBtn");
+        nextBtn.disabled = true;
+        nextBtn.innerText = "▶ PRÓXIMA DECISÃO";
+        nextBtn.onclick = () => {
+            if (answerLocked && !gameFinished && currentQuestionIndex < questions.length) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else if (!answerLocked && !gameFinished) {
+                alert("⚡ Você precisa tomar uma decisão antes de avançar!");
+            }
+        };
+    }
+    
+    function resetGame() {
+        currentQuestionIndex = 0;
+        score = 0;
+        answerLocked = false;
+        gameFinished = false;
+        indicators = {
+            pib: 100,
+            inflacao: 6.0,
+            desemprego: 8.5,
+            popularidade: 55
+        };
+        updateIndicatorsUI();
+        loadQuestion();
+    }
+    
+    // Controle da tela de introdução
+    document.getElementById("startGameBtn").addEventListener("click", () => {
+        document.getElementById("introScreen").style.display = "none";
+        document.getElementById("gameScreen").style.display = "block";
+        resetGame(); // Inicia o jogo com valores zerados/limpos
+    });
+    
+    document.getElementById("closeModalBtn").addEventListener("click", () => {
+        document.getElementById("explanationModal").style.display = "none";
+    });
+    
+    window.addEventListener("click", (e) => {
+        const modal = document.getElementById("explanationModal");
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+    
+    // Inicialização (só prepara, mas não carrega o jogo antes do start)
+    updateIndicatorsUI();
+</script>
+</body>
+</html>
