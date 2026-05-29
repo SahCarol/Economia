@@ -159,6 +159,61 @@
             font-weight: bold;
         }
 
+        /* Tela de introdução */
+        .intro-screen {
+            padding: 32px 28px;
+            text-align: center;
+        }
+
+        .intro-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .intro-title {
+            font-size: 2rem;
+            color: #2b5548;
+            margin-bottom: 15px;
+        }
+
+        .intro-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #4a6b62;
+            margin-bottom: 25px;
+            text-align: left;
+            background: #f0e9db;
+            padding: 22px;
+            border-radius: 32px;
+        }
+
+        .intro-highlight {
+            background: #e6d5b3;
+            padding: 15px;
+            border-radius: 24px;
+            margin: 20px 0;
+            font-weight: bold;
+            color: #5a431c;
+        }
+
+        .start-btn {
+            background: #2f7868;
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 60px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.2s;
+        }
+
+        .start-btn:hover {
+            background: #3e8f7c;
+            transform: scale(1.02);
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -267,11 +322,6 @@
             padding: 10px;
         }
 
-        .resultado-final h2 {
-            color: #2b5548;
-            margin-bottom: 15px;
-        }
-
         .resultado-status {
             font-size: 2rem;
             font-weight: bold;
@@ -301,36 +351,74 @@
             border-radius: 28px;
             margin-top: 15px;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-<div class="game-container">
-    <div class="minister-header">
-        <div class="title-area">
-            <h1>🏛️ MINISTRO DA ECONOMIA</h1>
-            <p>Suas decisões moldam o país | Baseado na Unifatecie</p>
+<div class="game-container" id="gameContainer">
+    <!-- TELA DE INTRODUÇÃO -->
+    <div id="introScreen">
+        <div class="minister-header" style="justify-content: center;">
+            <div class="title-area" style="text-align: center;">
+                <h1>🏛️ MINISTÉRIO DA ECONOMIA</h1>
+                <p>República Federativa do Brasil</p>
+            </div>
         </div>
-        <div class="score-area">📊 ACERTOS: <span id="scoreCounter">0</span>/<span id="totalQuestions">0</span></div>
-    </div>
-    <div class="indicators">
-        <div class="indicator">📈 PIB <div class="indicator-value" id="pibValue">100</div></div>
-        <div class="indicator">🔥 INFLAÇÃO <div class="indicator-value" id="infValue">6.0%</div></div>
-        <div class="indicator">👥 DESEMPREGO <div class="indicator-value" id="desValue">8.5%</div></div>
-        <div class="indicator">👍 POPULARIDADE <div class="indicator-value" id="popValue">55%</div></div>
+        <div class="intro-screen">
+            <div class="intro-icon">👨‍💼📊</div>
+            <div class="intro-title">Bem-vindo(a), Ministro(a)!</div>
+            <div class="intro-text">
+                <p>🗳️ <strong>O Presidente da República acaba de nomeá-lo(a) para o cargo de MINISTRO DA ECONOMIA.</strong></p>
+                <br>
+                <p>O país enfrenta desafios complexos: inflação persistente, desequilíbrio fiscal, demanda por eficiência no serviço público e pressões sociais. Sua missão é tomar decisões estratégicas que equilibrarão as contas públicas e promoverão o desenvolvimento.</p>
+                <br>
+                <p>Cada decisão que você tomar afetará <strong>quatro indicadores</strong>:</p>
+                <div class="intro-highlight">
+                    📈 PIB (crescimento) &nbsp;&nbsp;|&nbsp;&nbsp;
+                    🔥 Inflação &nbsp;&nbsp;|&nbsp;&nbsp;
+                    👥 Desemprego &nbsp;&nbsp;|&nbsp;&nbsp;
+                    👍 Popularidade
+                </div>
+                <p>🎯 <strong>OBJETIVO:</strong> Concluir as 8 demandas com bom desempenho para ter seu mandato renovado. Se os indicadores piorarem muito ou você errar muitas decisões, poderá ser <strong>demitido(a)</strong> ao final.</p>
+                <br>
+                <p>📖 <em>"A economia é a ciência da escassez e das escolhas" — Unidade II, Unifatecie.</em></p>
+            </div>
+            <button class="start-btn" id="startGameBtn">▶ INICIAR MANDATO</button>
+        </div>
     </div>
 
-    <div class="decision-area" id="decisionArea">
-        <div class="question-card">
-            <div class="question-text" id="questionText">Carregando...</div>
-            <div class="context" id="contextText"></div>
-            <div class="options" id="optionsContainer"></div>
+    <!-- TELA PRINCIPAL DO JOGO (inicialmente oculta) -->
+    <div id="gameScreen" style="display: none;">
+        <div class="minister-header">
+            <div class="title-area">
+                <h1>🏛️ MINISTRO DA ECONOMIA</h1>
+                <p>Suas decisões moldam o país | Baseado na Unifatecie</p>
+            </div>
+            <div class="score-area">📊 ACERTOS: <span id="scoreCounter">0</span>/<span id="totalQuestions">0</span></div>
         </div>
+        <div class="indicators">
+            <div class="indicator">📈 PIB <div class="indicator-value" id="pibValue">100</div></div>
+            <div class="indicator">🔥 INFLAÇÃO <div class="indicator-value" id="infValue">6.0%</div></div>
+            <div class="indicator">👥 DESEMPREGO <div class="indicator-value" id="desValue">8.5%</div></div>
+            <div class="indicator">👍 POPULARIDADE <div class="indicator-value" id="popValue">55%</div></div>
+        </div>
+
+        <div class="decision-area" id="decisionArea">
+            <div class="question-card">
+                <div class="question-text" id="questionText">Carregando...</div>
+                <div class="context" id="contextText"></div>
+                <div class="options" id="optionsContainer"></div>
+            </div>
+        </div>
+        <footer>
+            <button class="next-btn" id="nextBtn">▶ PRÓXIMA DECISÃO</button>
+            <button class="next-btn reset-btn" id="resetBtn">🔄 REINICIAR MANDATO</button>
+        </footer>
     </div>
-    <footer>
-        <button class="next-btn" id="nextBtn">▶ PRÓXIMA DECISÃO</button>
-        <button class="next-btn reset-btn" id="resetBtn">🔄 REINICIAR MANDATO</button>
-    </footer>
 </div>
 
 <div id="explanationModal" class="modal">
@@ -344,7 +432,7 @@
 </div>
 
 <script>
-    // ========== JOGO DE DECISÕES COM FINAL AVALIATIVO ==========
+    // ========== JOGO DE DECISÕES COM INTRODUÇÃO ==========
     
     let currentQuestionIndex = 0;
     let score = 0;
@@ -483,15 +571,12 @@
         let status = "";
         let corClass = "";
         let analise = "";
-        let continua = false;
         
-        // Critério composto para decidir permanência
         const economiaSaudavel = (pibFinal >= 85 && inflacaoFinal <= 9 && desempregoFinal <= 11);
         const popularidadeAceitavel = popularidadeFinal >= 40;
         const desempenhoBom = aproveitamento >= 60;
         
         if (aproveitamento >= 70 && economiaSaudavel && popularidadeAceitavel) {
-            continua = true;
             status = "✅ MANDATO RENOVADO! ✅";
             corClass = "aprovado";
             analise = `🏆 Excelente desempenho, Ministro! O Presidente analisou sua gestão e decidiu mantê-lo no cargo.<br><br>
@@ -505,7 +590,6 @@
             Você aplicou com maestria os conceitos de política fiscal responsável (Unidade IV), entendeu a importância do equilíbrio entre gastos públicos e eficiência administrativa. Suas decisões sobre servidores públicos mostraram equilíbrio entre responsabilidade fiscal e justiça social. O país está em boas mãos!`;
         } 
         else if (aproveitamento >= 50 && pibFinal >= 70 && popularidadeFinal >= 35) {
-            continua = true;
             status = "⚠️ MANDATO RENOVADO COM RESSALVAS ⚠️";
             corClass = "aprovado";
             analise = `📋 O Presidente decidiu mantê-lo, mas exigirá mudanças na equipe econômica. Sua gestão teve altos e baixos.<br><br>
@@ -519,7 +603,6 @@
             Você demonstrou conhecimento dos fundamentos econômicos, mas algumas decisões foram contestáveis. Conforme ensina o livro, a economia é a ciência da escassez e requer escolhas difíceis. Sua margem de manobra será reduzida no próximo mandato. Estude mais sobre políticas macroeconômicas para melhorar.`;
         }
         else {
-            continua = false;
             status = "❌ MINISTRO DEMITIDO! ❌";
             corClass = "reprovado";
             let motivo = "";
@@ -550,101 +633,4 @@
         `;
         document.getElementById("optionsContainer").innerHTML = "";
         const nextBtn = document.getElementById("nextBtn");
-        nextBtn.innerText = "🔄 REINICIAR MANDATO";
-        nextBtn.disabled = false;
-        nextBtn.onclick = () => resetGame();
-    }
-    
-    function loadQuestion() {
-        if (currentQuestionIndex >= questions.length) {
-            avaliarFinal();
-            gameFinished = true;
-            return;
-        }
-        
-        answerLocked = false;
-        const q = questions[currentQuestionIndex];
-        document.getElementById("questionText").innerHTML = q.text;
-        document.getElementById("contextText").innerHTML = q.context;
-        
-        const optionsDiv = document.getElementById("optionsContainer");
-        optionsDiv.innerHTML = "";
-        
-        q.options.forEach((opt, idx) => {
-            const btn = document.createElement("div");
-            btn.className = "option-btn";
-            const prefix = String.fromCharCode(65 + idx);
-            btn.innerHTML = `<div class="option-prefix">${prefix}</div><div>${opt.text}</div>`;
-            
-            btn.addEventListener("click", () => {
-                if (answerLocked || gameFinished) return;
-                answerLocked = true;
-                
-                const isCorrect = opt.correct;
-                if (isCorrect) {
-                    score++;
-                    updateIndicatorsUI();
-                }
-                
-                applyIndicatorChanges(opt.effect);
-                
-                const effectDesc = `📈 PIB: ${opt.effect.pib >= 0 ? '+' : ''}${opt.effect.pib} | 🔥 Inflação: ${opt.effect.inflacao >= 0 ? '+' : ''}${opt.effect.inflacao}% | 👥 Desemprego: ${opt.effect.desemprego >= 0 ? '+' : ''}${opt.effect.desemprego}% | 👍 Popularidade: ${opt.effect.popularidade >= 0 ? '+' : ''}${opt.effect.popularidade}%`;
-                
-                showModal(isCorrect ? "Acertou!" : "Errou!", opt.explanation, isCorrect, effectDesc);
-                
-                document.querySelectorAll(".option-btn").forEach(btn => {
-                    btn.classList.add("disabled-option");
-                });
-                
-                const nextBtn = document.getElementById("nextBtn");
-                nextBtn.disabled = false;
-            });
-            
-            optionsDiv.appendChild(btn);
-        });
-        
-        const nextBtn = document.getElementById("nextBtn");
-        nextBtn.disabled = true;
-        nextBtn.innerText = "▶ PRÓXIMA DECISÃO";
-        nextBtn.onclick = () => {
-            if (answerLocked && !gameFinished && currentQuestionIndex < questions.length) {
-                currentQuestionIndex++;
-                loadQuestion();
-            } else if (!answerLocked && !gameFinished) {
-                alert("⚡ Você precisa tomar uma decisão antes de avançar!");
-            }
-        };
-    }
-    
-    function resetGame() {
-        currentQuestionIndex = 0;
-        score = 0;
-        answerLocked = false;
-        gameFinished = false;
-        indicators = {
-            pib: 100,
-            inflacao: 6.0,
-            desemprego: 8.5,
-            popularidade: 55
-        };
-        updateIndicatorsUI();
-        loadQuestion();
-    }
-    
-    document.getElementById("closeModalBtn").addEventListener("click", () => {
-        document.getElementById("explanationModal").style.display = "none";
-    });
-    
-    window.addEventListener("click", (e) => {
-        const modal = document.getElementById("explanationModal");
-        if (e.target === modal) {
-            modal.style.display = "none";
-        }
-    });
-    
-    updateIndicatorsUI();
-    loadQuestion();
-    document.getElementById("resetBtn").addEventListener("click", resetGame);
-</script>
-</body>
-</html>
+        nextBtn.innerText = "
