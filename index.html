@@ -159,7 +159,6 @@
             font-weight: bold;
         }
 
-        /* Tela de introdução */
         .intro-screen {
             padding: 32px 28px;
             text-align: center;
@@ -256,7 +255,7 @@
             font-size: 0.95rem;
             color: #2a5a45;
             text-align: left;
-            max-height: 350px;
+            max-height: 400px;
             overflow-y: auto;
         }
 
@@ -366,7 +365,7 @@
         <div class="minister-header" style="justify-content: center;">
             <div class="title-area" style="text-align: center;">
                 <h1>🏛️ MINISTÉRIO DA ECONOMIA</h1>
-                <p>República Federativa do Brasil</p>
+                <p>Decisões que transformam o país</p>
             </div>
         </div>
         <div class="intro-screen">
@@ -384,20 +383,20 @@
                     👥 Desemprego &nbsp;&nbsp;|&nbsp;&nbsp;
                     👍 Popularidade
                 </div>
-                <p>🎯 <strong>OBJETIVO:</strong> Concluir as 8 demandas com bom desempenho para ter seu mandato renovado. Se os indicadores piorarem muito ou você errar muitas decisões, poderá ser <strong>demitido(a)</strong> ao final.</p>
+                <p>🎯 <strong>OBJETIVO:</strong> Concluir as 20 demandas com bom desempenho para ter seu mandato renovado. Se os indicadores piorarem muito ou você errar muitas decisões, poderá ser <strong>demitido(a)</strong> ao final.</p>
                 <br>
-                <p>📖 <em>"A economia é a ciência da escassez e das escolhas" — Unidade II, Unifatecie.</em></p>
+                <p>📖 <em>"A economia é a ciência da escassez e das escolhas"</em></p>
             </div>
             <button class="start-btn" id="startGameBtn">▶ INICIAR MANDATO</button>
         </div>
     </div>
 
-    <!-- TELA PRINCIPAL DO JOGO (inicialmente oculta) -->
+    <!-- TELA PRINCIPAL DO JOGO -->
     <div id="gameScreen" style="display: none;">
         <div class="minister-header">
             <div class="title-area">
                 <h1>🏛️ MINISTRO DA ECONOMIA</h1>
-                <p>Suas decisões moldam o país | Baseado na Unifatecie</p>
+                <p>Suas decisões moldam o país</p>
             </div>
             <div class="score-area">📊 ACERTOS: <span id="scoreCounter">0</span>/<span id="totalQuestions">0</span></div>
         </div>
@@ -427,13 +426,13 @@
         <div class="modal-icon" id="modalIcon">⚖️</div>
         <div class="modal-title" id="modalTitle">Decisão Avaliada</div>
         <div class="modal-explanation" id="modalExplanation"></div>
-        <div class="modal-book" id="modalBookRef">📖 Unifatecie - Economia</div>
+        <div class="modal-book" id="modalBookRef">📖 Fundamentos da Economia</div>
         <button class="modal-close" id="closeModalBtn">CONTINUAR</button>
     </div>
 </div>
 
 <script>
-    // ========== JOGO DE DECISÕES CORRIGIDO ==========
+    // ========== JOGO DE DECISÕES - 20 PERGUNTAS ==========
     
     let currentQuestionIndex = 0;
     let score = 0;
@@ -447,78 +446,186 @@
         popularidade: 55
     };
     
-    // Lista de decisões (8 perguntas com foco em servidores públicos)
+    // 20 perguntas sobre economia e servidores públicos
     const questions = [
         {
             text: "📌 REVISÃO DO FUNCIONALISMO PÚBLICO",
-            context: "O funcionalismo público consome 40% do orçamento. Alguns conselheiros sugerem um plano de revisão de benefícios e aposentadorias para equilibrar as contas. Como ministro, você decide:",
+            context: "O funcionalismo público consome 40% do orçamento. Como ministro, você decide:",
             options: [
-                { text: "Implementar revisão gradual com metas de produtividade e congelamento temporário de admissões", correct: true, effect: { pib: +2, inflacao: -0.5, desemprego: +0.2, popularidade: -2 }, explanation: "✅ Decisão correta! Medidas de ajuste fiscal sem demissões em massa ajudam a reduzir gasto público sem gerar colapso. O livro (Unidade IV - Política Fiscal) destaca que o controle de despesas melhora a confiança dos agentes econômicos." },
-                { text: "Demitir 30% dos servidores efetivos imediatamente", correct: false, effect: { pib: -5, inflacao: -0.2, desemprego: +4, popularidade: -18 }, explanation: "❌ Decisão incorreta. Demissões abruptas causam aumento brutal do desemprego, queda de demanda e instabilidade social. O problema da escassez (Unidade II) precisa de soluções planejadas, não radicais." },
-                { text: "Aumentar salários e contratar mais servidores para estimular consumo", correct: false, effect: { pib: +1, inflacao: +2.5, desemprego: -1, popularidade: +5 }, explanation: "❌ Risco alto! Expansão desordenada do funcionalismo amplia déficit público e pode gerar inflação de demanda. O equilíbrio fiscal é essencial segundo a política macroeconômica." }
+                { text: "Implementar revisão gradual com metas de produtividade", correct: true, effect: { pib: +2, inflacao: -0.5, desemprego: +0.2, popularidade: -2 }, justification: "✅ Justificativa: A revisão gradual com metas é a medida mais equilibrada. Reduz gastos sem causar demissões em massa, mantendo a eficiência do serviço público. Demissões abruptas gerariam desemprego e queda de consumo, enquanto aumentos indiscriminados piorariam a inflação." },
+                { text: "Demitir 30% dos servidores imediatamente", correct: false, effect: { pib: -5, inflacao: -0.2, desemprego: +4, popularidade: -18 }, justification: "❌ Justificativa: Demissões em massa causam aumento brutal do desemprego (indicador sobe 4%), queda do PIB e instabilidade social. O ajuste fiscal deve ser gradual para não gerar recessão." },
+                { text: "Aumentar salários e contratar mais servidores", correct: false, effect: { pib: +1, inflacao: +2.5, desemprego: -1, popularidade: +5 }, justification: "❌ Justificativa: Expansão desordenada do funcionalismo amplia o déficit público em 2.5% e gera inflação de demanda. O gasto público precisa ser controlado, não expandido sem lastro." }
             ]
         },
         {
             text: "🏦 REFORMA ADMINISTRATIVA",
-            context: "O relatório aponta que o número de cargos comissionados cresceu 50% nos últimos 5 anos. Para aumentar eficiência, o que fazer?",
+            context: "Cargos comissionados cresceram 50% nos últimos 5 anos. O que fazer?",
             options: [
-                { text: "Reduzir comissionismos e adotar avaliação de desempenho para todos os cargos", correct: true, effect: { pib: +2, inflacao: -0.3, desemprego: 0, popularidade: 0 }, explanation: "✅ Acerto! Enxugar privilégios e medir desempenho melhora a alocação de recursos e aumenta a produtividade do setor público. Tema da Unidade II: setores da economia e eficiência." },
-                { text: "Ignorar, pois servidores públicos merecem estabilidade total sem avaliação", correct: false, effect: { pib: -1, inflacao: +0.4, desemprego: 0, popularidade: -3 }, explanation: "❌ Decisão questionável. A falta de eficiência gera desperdício e aumenta a carga tributária indireta. A economia lida com escassez; todo gasto deve gerar retorno social." },
-                { text: "Privatizar todos os serviços públicos e demitir em massa", correct: false, effect: { pib: -2, inflacao: +0.5, desemprego: +3, popularidade: -15 }, explanation: "❌ Erro grave. Sem planejamento, gera desemprego estrutural e falhas na prestação de serviços essenciais. O estado possui funções alocativas importantes (bens públicos)." }
+                { text: "Reduzir comissionismos e adotar avaliação de desempenho", correct: true, effect: { pib: +2, inflacao: -0.3, desemprego: 0, popularidade: 0 }, justification: "✅ Justificativa: Enxugar privilégios melhora a eficiência alocativa dos recursos públicos. A avaliação de desempenho garante que os servidores mais produtivos sejam valorizados." },
+                { text: "Ignorar, pois servidores merecem estabilidade total", correct: false, effect: { pib: -1, inflacao: +0.4, desemprego: 0, popularidade: -3 }, justification: "❌ Justificativa: Ignorar a ineficiência gera desperdício e aumenta a carga tributária indireta. A falta de controle corrói a confiança da sociedade nas instituições." },
+                { text: "Privatizar todos os serviços e demitir em massa", correct: false, effect: { pib: -2, inflacao: +0.5, desemprego: +3, popularidade: -15 }, justification: "❌ Justificativa: Privatizações sem planejamento geram desemprego estrutural (3%) e falhas na prestação de serviços essenciais. O Estado tem funções alocativas importantes." }
             ]
         },
         {
-            text: "💰 VINCULAÇÃO ORÇAMENTÁRIA E SERVIDORES",
-            context: "O teto de gastos está sendo pressionado. Alguns defendem que servidores devem ter reajuste anual pela inflação. Como agir?",
+            text: "💰 REAJUSTE DOS SERVIDORES",
+            context: "Servidores pedem reajuste pela inflação. Como agir?",
             options: [
-                { text: "Reajuste nos limites da responsabilidade fiscal, baseado em produtividade e ganhos reais do PIB", correct: true, effect: { pib: 0, inflacao: -0.2, desemprego: 0, popularidade: +2 }, explanation: "✅ Correto. A Lei de Responsabilidade Fiscal exige equilíbrio. Reajustes atrelados à inflação sem ganho real são sustentáveis, desde que haja contrapartida em produtividade." },
-                { text: "Conceder aumento de 10% acima da inflação para agradar sindicatos", correct: false, effect: { pib: -1, inflacao: +1.3, desemprego: +0.4, popularidade: +4 }, explanation: "❌ Inflação de custos e déficit primário. O livro explica que aumentos reais permanentes sem ganhos de produtividade geram pressão inflacionária." },
-                { text: "Congelar salários por 5 anos sem correção", correct: false, effect: { pib: -2, inflacao: -0.5, desemprego: +0.8, popularidade: -10 }, explanation: "❌ Decisão impopular e injusta. Pode reduzir moral do serviço público e prejudicar a qualidade dos serviços, além de efeitos recessivos." }
+                { text: "Reajuste nos limites fiscais, baseado em produtividade", correct: true, effect: { pib: 0, inflacao: -0.2, desemprego: 0, popularidade: +2 }, justification: "✅ Justificativa: Reajustes dentro da responsabilidade fiscal são sustentáveis. Vincular à produtividade evita pressões inflacionárias e mantém o equilíbrio das contas públicas." },
+                { text: "Conceder aumento de 10% acima da inflação", correct: false, effect: { pib: -1, inflacao: +1.3, desemprego: +0.4, popularidade: +4 }, justification: "❌ Justificativa: Aumentos reais sem ganhos de produtividade geram inflação de custos (+1.3%) e déficit primário. A curto prazo agrada, mas compromete o futuro." },
+                { text: "Congelar salários por 5 anos", correct: false, effect: { pib: -2, inflacao: -0.5, desemprego: +0.8, popularidade: -10 }, justification: "❌ Justificativa: Congelamento prolongado reduz o poder de compra, gera insatisfação e prejudica a qualidade dos serviços públicos, além de efeitos recessivos." }
             ]
         },
         {
-            text: "📊 EFEITO DOS SERVIDORES NA DEMANDA AGREGADA",
-            context: "Servidores públicos representam uma parcela importante do consumo. Em um momento de recessão, o que fazer?",
+            text: "📉 COMBATE À INFLAÇÃO",
+            context: "Inflação anual ultrapassou 10%. Qual medida prioritária?",
             options: [
-                { text: "Manter salários e até antecipar parte do 13º para injetar liquidez", correct: true, effect: { pib: +3, inflacao: +0.4, desemprego: -0.6, popularidade: +6 }, explanation: "✅ Visão keynesiana! Em recessão, manter o poder de compra dos servidores estabiliza a demanda agregada. Unidade IV: política fiscal anticíclica e o princípio da demanda efetiva." },
-                { text: "Cortar salários em 20% para equilibrar contas agora", correct: false, effect: { pib: -4, inflacao: -0.8, desemprego: +2, popularidade: -20 }, explanation: "❌ Medida pró-cíclica piora a recessão. O livro ensina que o estado deve ampliar gastos em momentos de crise, como proposto por Keynes." },
-                { text: "Privatizar empresas estatais e usar recursos para demitir funcionários", correct: false, effect: { pib: -2, inflacao: +0.2, desemprego: +1.5, popularidade: -12 }, explanation: "❌ Não resolve escassez no curto prazo e amplia desemprego sem garantia de eficiência." }
+                { text: "Aumentar a taxa básica de juros (política monetária contracionista)", correct: true, effect: { pib: -1, inflacao: -1.5, desemprego: +0.5, popularidade: -3 }, justification: "✅ Justificativa: Aumentar juros reduz a demanda agregada, controlando a inflação. É a medida clássica de política monetária para conter excesso de moeda na economia." },
+                { text: "Aumentar gastos públicos para estimular produção", correct: false, effect: { pib: +2, inflacao: +1.2, desemprego: -0.5, popularidade: +2 }, justification: "❌ Justificativa: Aumentar gastos em momento de alta inflação piora o quadro. Mais dinheiro circulando sem aumento de produção eleva ainda mais os preços." },
+                { text: "Congelar preços e salários", correct: false, effect: { pib: -3, inflacao: -0.8, desemprego: +1.5, popularidade: -12 }, justification: "❌ Justificativa: Congelamento cria escassez, mercado negro e desorganização econômica. Historicamente, controles de preço falham e geram distorções graves." }
             ]
         },
         {
-            text: "🎓 CONCURSOS PÚBLICOS E CAPITAL HUMANO",
-            context: "Há necessidade de profissionais em saúde e educação. Como expandir o serviço público sem comprometer o orçamento?",
+            text: "🎓 CONCURSOS E CAPITAL HUMANO",
+            context: "Falta profissionais em saúde e educação. O que fazer?",
             options: [
-                { text: "Realizar concursos específicos, mas com redução de cargos obsoletos e reforma de despesas", correct: true, effect: { pib: +1, inflacao: -0.1, desemprego: -0.3, popularidade: +3 }, explanation: "✅ Decisão equilibrada. Otimizar o quadro de pessoal, investindo em áreas prioritárias, melhora o bem-estar social. Conceito de bens públicos (Unidade II)." },
-                { text: "Contratar sem critério, apenas para agradar bases políticas", correct: false, effect: { pib: -1, inflacao: +0.9, desemprego: -0.4, popularidade: -5 }, explanation: "❌ Clientelismo aumenta ineficiência, gera déficit e compromete a qualidade do gasto público." },
-                { text: "Proibir qualquer nova contratação por 10 anos", correct: false, effect: { pib: -3, inflacao: -0.2, desemprego: 0, popularidade: -7 }, explanation: "❌ Paralisa serviços essenciais. Educação e saúde sofrem, impacto negativo no capital humano de longo prazo." }
+                { text: "Concursos específicos com redução de cargos obsoletos", correct: true, effect: { pib: +1, inflacao: -0.1, desemprego: -0.3, popularidade: +3 }, justification: "✅ Justificativa: Otimizar o quadro, investindo em áreas prioritárias, melhora o bem-estar social e a eficiência do gasto público sem comprometer o orçamento." },
+                { text: "Contratar sem critério para agradar bases políticas", correct: false, effect: { pib: -1, inflacao: +0.9, desemprego: -0.4, popularidade: -5 }, justification: "❌ Justificativa: Clientelismo aumenta ineficiência, gera déficit e compromete a qualidade do gasto público. A curto prazo parece vantajoso, mas gera problemas futuros." },
+                { text: "Proibir novas contratações por 10 anos", correct: false, effect: { pib: -3, inflacao: -0.2, desemprego: 0, popularidade: -7 }, justification: "❌ Justificativa: Congelamento de contratações paralisa serviços essenciais. Educação e saúde sofrem, com impacto negativo no capital humano de longo prazo." }
             ]
         },
         {
-            text: "⚖️ SERVIDORES PÚBLICOS E PRIVATIZAÇÕES",
-            context: "Estatais deficitárias acumulam prejuízos. Seu conselho sugere enxugar pessoal. Qual caminho?",
+            text: "⚖️ REFORMA PREVIDENCIÁRIA",
+            context: "Déficit previdenciário bilionário. Como agir?",
             options: [
-                { text: "Programa de desligamento voluntário (PDV) com incentivo e requalificação profissional", correct: true, effect: { pib: +0.5, inflacao: -0.2, desemprego: +0.2, popularidade: 0 }, explanation: "✅ Correto. Minimiza danos sociais e reduz gastos futuros. O livro aborda economia e escolhas com eficiência alocativa." },
-                { text: "Demitir unilateralmente todos os servidores da estatal", correct: false, effect: { pib: -3, inflacao: +0.1, desemprego: +2.8, popularidade: -14 }, explanation: "❌ Impacto social e elevação do desemprego abrupto, sem respeitar direitos. Escassez de recursos não justifica injustiça." },
-                { text: "Manter prejuízos sem mudanças", correct: false, effect: { pib: -1.5, inflacao: +0.3, desemprego: 0, popularidade: -4 }, explanation: "❌ Adia problema e desperdiça recursos públicos que poderiam ser usados em saúde/educação." }
+                { text: "Idade mínima progressiva e contribuição revisada", correct: true, effect: { pib: +2, inflacao: -0.4, desemprego: +0.1, popularidade: -3 }, justification: "✅ Justificativa: Reforma necessária para garantir sustentabilidade fiscal a longo prazo. Aumenta a idade de aposentadoria gradualmente, sem cortes abruptos." },
+                { text: "Manter regras e aumentar impostos gerais", correct: false, effect: { pib: -1, inflacao: +0.5, desemprego: +0.3, popularidade: -2 }, justification: "❌ Justificativa: Penaliza o setor produtivo e não resolve o déficit estrutural. Aumentar impostos desestimula investimento e crescimento." },
+                { text: "Extinguir previdência sem alternativas", correct: false, effect: { pib: -3, inflacao: +0.1, desemprego: +0.5, popularidade: -25 }, justification: "❌ Justificativa: Medida extrema e desastrosa socialmente, destrói a confiança nas instituições e gera caos previdenciário." }
             ]
         },
         {
-            text: "📉 INFLAÇÃO E REAJUSTE DOS SERVIDORES",
-            context: "Inflação acumulada em 12% nos últimos 12 meses. Servidores pedem recomposição integral. Como decidir?",
+            text: "🏭 INCENTIVO À INDÚSTRIA",
+            context: "Setor industrial em recessão. Como estimular?",
             options: [
-                { text: "Oferecer recomposição parcial + bônus por produtividade para evitar espiral inflacionária", correct: true, effect: { pib: 0, inflacao: -0.5, desemprego: 0, popularidade: +1 }, explanation: "✅ Política de rendas consciente. A indexação total alimenta inércia inflacionária (Unidade IV: inflação inercial). Melhor vincular a metas de resultado." },
-                { text: "Conceder reajuste integral imediato", correct: false, effect: { pib: -1, inflacao: +0.8, desemprego: 0, popularidade: +5 }, explanation: "❌ Reforça a inflação (realimentação). O Plano Real quebrou a inércia justamente evitando indexação total." },
-                { text: "Congelar salários e ignorar inflação", correct: false, effect: { pib: -2, inflacao: -0.2, desemprego: +0.6, popularidade: -15 }, explanation: "❌ Perda de poder de compra prejudica o consumo e gera insatisfação social generalizada." }
+                { text: "Redução de impostos e linhas de crédito especiais", correct: true, effect: { pib: +3, inflacao: +0.3, desemprego: -1.2, popularidade: +4 }, justification: "✅ Justificativa: Estímulo fiscal pelo lado da oferta. Reduzir impostos aumenta a competitividade e atrai investimentos, gerando emprego e crescimento." },
+                { text: "Aumentar tarifas de importação", correct: false, effect: { pib: -1, inflacao: +0.8, desemprego: 0, popularidade: -2 }, justification: "❌ Justificativa: Protecionismo excessivo gera ineficiência, aumenta preços internos e pode provocar retaliações comerciais." },
+                { text: "Cortar gastos públicos para financiar indústrias", correct: false, effect: { pib: 0, inflacao: -0.2, desemprego: +0.5, popularidade: -5 }, justification: "❌ Justificativa: Cortar gastos sociais para subsidiar indústrias é politicamente inviável e pode gerar recessão por queda de demanda." }
             ]
         },
         {
-            text: "🌱 SUSTENTABILIDADE PREVIDENCIÁRIA",
-            context: "Sistema previdenciário dos servidores tem déficit bilionário. Que reforma você propõe?",
+            text: "💱 CRISE CAMBIAL",
+            context: "Moeda desvalorizada 25% em 6 meses. O que fazer?",
             options: [
-                { text: "Idade mínima progressiva + contribuição patronal revisada", correct: true, effect: { pib: +2, inflacao: -0.4, desemprego: +0.1, popularidade: -3 }, explanation: "✅ Reforma necessária para garantir sustentabilidade fiscal e evitar explosão da dívida. Economia estuda alocação intertemporal de recursos e equilíbrio fiscal." },
-                { text: "Manter regras antigas e aumentar impostos gerais", correct: false, effect: { pib: -1, inflacao: +0.5, desemprego: +0.3, popularidade: -2 }, explanation: "❌ Penaliza o setor produtivo e não resolve o déficit estrutural da previdência." },
-                { text: "Extinguir a previdência dos servidores sem alternativas", correct: false, effect: { pib: -3, inflacao: +0.1, desemprego: +0.5, popularidade: -25 }, explanation: "❌ Medida inconstitucional e desastrosa socialmente, destruindo a confiança nas instituições." }
+                { text: "Intervir no câmbio e aumentar juros moderadamente", correct: true, effect: { pib: -0.5, inflacao: -0.8, desemprego: +0.2, popularidade: -1 }, justification: "✅ Justificativa: Intervenção cambial + juros moderados estabiliza a moeda sem causar recessão profunda. Combina instrumentos para efeito mais suave." },
+                { text: "Deixar o mercado se ajustar (laissez-faire)", correct: false, effect: { pib: -2, inflacao: +1.5, desemprego: +0.8, popularidade: -8 }, justification: "❌ Justificativa: Em crises cambiais severas, a não-intervenção pode agravar a desvalorização, gerando inflação importada e fuga de capitais." },
+                { text: "Fechar o mercado cambial", correct: false, effect: { pib: -5, inflacao: +2, desemprego: +1.5, popularidade: -20 }, justification: "❌ Justificativa: Controle cambial extremo gera mercado negro, escassez de importados e desorganização econômica, além de isolar o país internacionalmente." }
+            ]
+        },
+        {
+            text: "📊 EFEITO DOS SERVIDORES NA DEMANDA",
+            context: "Recessão econômica. O que fazer com servidores?",
+            options: [
+                { text: "Manter salários e antecipar parte do 13º", correct: true, effect: { pib: +3, inflacao: +0.4, desemprego: -0.6, popularidade: +6 }, justification: "✅ Justificativa: Visão keynesiana! Manter o poder de compra dos servidores estabiliza a demanda agregada em recessão. É política fiscal anticíclica." },
+                { text: "Cortar salários para equilibrar contas", correct: false, effect: { pib: -4, inflacao: -0.8, desemprego: +2, popularidade: -20 }, justification: "❌ Justificativa: Medida pró-cíclica piora a recessão. Cortar salários reduz consumo e aprofunda a queda do PIB, agravando o desemprego." },
+                { text: "Privatizar estatais e demitir", correct: false, effect: { pib: -2, inflacao: +0.2, desemprego: +1.5, popularidade: -12 }, justification: "❌ Justificativa: Não resolve escassez no curto prazo, amplia desemprego e reduz a demanda agregada em momento crítico." }
+            ]
+        },
+        {
+            text: "🌱 INVESTIMENTO EM INFRAESTRUTURA",
+            context: "País precisa de modernização logística. Como financiar?",
+            options: [
+                { text: "PPP (Parcerias Público-Privadas) com leilões competitivos", correct: true, effect: { pib: +4, inflacao: 0, desemprego: -1, popularidade: +2 }, justification: "✅ Justificativa: PPP atrai capital privado sem comprometer totalmente o orçamento público. Gera empregos, crescimento e modernização com risco compartilhado." },
+                { text: "Aumentar impostos para financiar integralmente", correct: false, effect: { pib: -2, inflacao: +0.3, desemprego: +0.5, popularidade: -8 }, justification: "❌ Justificativa: Aumento de impostos desestimula investimento privado e consumo, podendo anular os benefícios do investimento público." },
+                { text: "Não investir para não aumentar dívida", correct: false, effect: { pib: -1, inflacao: 0, desemprego: +0.2, popularidade: -3 }, justification: "❌ Justificativa: Não investir compromete a competitividade futura. Infraestrutura é essencial para crescimento sustentável de longo prazo." }
+            ]
+        },
+        {
+            text: "📈 POLÍTICA MONETÁRIA",
+            context: "Banco Central precisa definir rumo dos juros. O que priorizar?",
+            options: [
+                { text: "Metas de inflação com flexibilidade para crescimento", correct: true, effect: { pib: +1, inflacao: -0.3, desemprego: -0.2, popularidade: +1 }, justification: "✅ Justificativa: Metas de inflação com flexibilidade permitem equilibrar controle de preços e estímulo ao crescimento. Evita aperto excessivo que gera recessão." },
+                { text: "Juros baixos a qualquer custo", correct: false, effect: { pib: +2, inflacao: +1.8, desemprego: -0.8, popularidade: +3 }, justification: "❌ Justificativa: Juros baixos sem controle geram inflação e desancoragem das expectativas, comprometendo a credibilidade da política monetária." },
+                { text: "Juros altos para zerar inflação imediatamente", correct: false, effect: { pib: -4, inflacao: -1.2, desemprego: +2, popularidade: -10 }, justification: "❌ Justificativa: Aperto monetário excessivo causa recessão profunda e desemprego, com custos sociais elevados para ganhos marginais na inflação." }
+            ]
+        },
+        {
+            text: "🏥 SAÚDE PÚBLICA",
+            context: "Sistema de saúde sobrecarregado. Como melhorar?",
+            options: [
+                { text: "Gestão por resultados e parcerias com setor privado", correct: true, effect: { pib: +1, inflacao: 0, desemprego: -0.2, popularidade: +5 }, justification: "✅ Justificativa: Gestão por resultados aumenta eficiência do gasto público. Parcerias bem reguladas ampliam capacidade de atendimento sem aumento de despesas." },
+                { text: "Aumentar impostos para contratar mais servidores", correct: false, effect: { pib: -1, inflacao: +0.4, desemprego: -0.3, popularidade: -2 }, justification: "❌ Justificativa: Mais servidores sem gestão eficiente não resolve o problema e aumenta o custo do Estado, pressionando impostos." },
+                { text: "Cortar investimentos em saúde para equilibrar contas", correct: false, effect: { pib: -2, inflacao: -0.1, desemprego: +0.3, popularidade: -15 }, justification: "❌ Justificativa: Cortar saúde compromete vidas e é insustentável politicamente. O custo social supera qualquer ganho fiscal de curto prazo." }
+            ]
+        },
+        {
+            text: "📚 EDUCAÇÃO BÁSICA",
+            context: "Qualidade da educação em declínio. O que priorizar?",
+            options: [
+                { text: "Formação de professores e gestão por resultados", correct: true, effect: { pib: +2, inflacao: 0, desemprego: -0.1, popularidade: +4 }, justification: "✅ Justificativa: Investir em formação de professores e gestão eficiente melhora a qualidade sem necessariamente aumentar gastos. Educação de qualidade eleva produtividade futura." },
+                { text: "Construir mais escolas sem melhorar gestão", correct: false, effect: { pib: 0, inflacao: +0.1, desemprego: -0.1, popularidade: +1 }, justification: "❌ Justificativa: Mais escolas sem qualidade de ensino não resolvem o problema. Recursos mal alocados geram desperdício sem retorno social." },
+                { text: "Cortar investimentos educacionais", correct: false, effect: { pib: -3, inflacao: -0.1, desemprego: +0.2, popularidade: -12 }, justification: "❌ Justificativa: Cortar educação compromete o capital humano e a produtividade futura do país. É um dos piores cortes possíveis para desenvolvimento." }
+            ]
+        },
+        {
+            text: "⚡ CRISE ENERGÉTICA",
+            context: "Alta nos preços da energia. Como minimizar impacto?",
+            options: [
+                { text: "Subsídios temporários focalizados + incentivo à eficiência", correct: true, effect: { pib: +1, inflacao: -0.5, desemprego: 0, popularidade: +2 }, justification: "✅ Justificativa: Subsídios focalizados protegem os mais pobres sem distorcer muito o mercado. Incentivo à eficiência reduz custos de longo prazo." },
+                { text: "Congelar preços da energia", correct: false, effect: { pib: -1, inflacao: +0.3, desemprego: 0, popularidade: +1 }, justification: "❌ Justificativa: Congelamento gera desabastecimento e necessidade de racionamento. Distorce o mercado e pode piorar a crise no médio prazo." },
+                { text: "Deixar preços livres sem proteção social", correct: false, effect: { pib: -2, inflacao: +0.8, desemprego: +0.3, popularidade: -8 }, justification: "❌ Justificativa: Aumento integral repassado aos consumidores gera inflação e impacta desproporcionalmente os mais pobres, causando insatisfação." }
+            ]
+        },
+        {
+            text: "🏛️ TRANSPARÊNCIA E EFICIÊNCIA",
+            context: "Denúncias de corrupção em órgãos públicos. Como agir?",
+            options: [
+                { text: "Fortalecer órgãos de controle e transparência digital", correct: true, effect: { pib: +1, inflacao: -0.2, desemprego: 0, popularidade: +8 }, justification: "✅ Justificativa: Mais controle e transparência aumentam a confiança da sociedade, reduzem desperdícios e melhoram a eficiência do gasto público." },
+                { text: "Ignorar denúncias para não prejudicar aliados", correct: false, effect: { pib: -2, inflacao: +0.2, desemprego: 0, popularidade: -12 }, justification: "❌ Justificativa: Ignorar corrupção gera perda de credibilidade, afasta investimentos e corrói a confiança nas instituições, com custos econômicos elevados." },
+                { text: "Criar comissões sem poderes efetivos", correct: false, effect: { pib: -0.5, inflacao: 0, desemprego: 0, popularidade: -3 }, justification: "❌ Justificativa: Medidas cosméticas sem efetividade não resolvem o problema e são percebidas como protelação, gerando mais insatisfação popular." }
+            ]
+        },
+        {
+            text: "🌍 COMÉRCIO EXTERIOR",
+            context: "Exportações em queda. Como reverter?",
+            options: [
+                { text: "Acordos bilaterais e desburocratização", correct: true, effect: { pib: +3, inflacao: -0.1, desemprego: -0.5, popularidade: +2 }, justification: "✅ Justificativa: Acordos comerciais ampliam mercados. Desburocratização reduz custos de exportação, tornando produtos nacionais mais competitivos." },
+                { text: "Aumentar tarifas de importação", correct: false, effect: { pib: -1, inflacao: +0.7, desemprego: 0, popularidade: -2 }, justification: "❌ Justificativa: Tarifas protecionistas geram retaliações e aumentam preços internos, prejudicando consumidores e a competitividade da indústria local." },
+                { text: "Desvalorizar artificialmente a moeda", correct: false, effect: { pib: 0, inflacao: +1.2, desemprego: 0, popularidade: -5 }, justification: "❌ Justificativa: Desvalorização artificial gera inflação importada e pode provocar retaliações comerciais, além de desconfiança de investidores." }
+            ]
+        },
+        {
+            text: "🏗️ MERCADO DE TRABALHO",
+            context: "Alta informalidade. Como formalizar empregos?",
+            options: [
+                { text: "Redução de impostos sobre folha e simplificação", correct: true, effect: { pib: +2, inflacao: 0, desemprego: -1, popularidade: +3 }, justification: "✅ Justificativa: Reduzir custo da formalização estimula empresas a contratarem com carteira assinada. Simplificação reduz burocracia, gerando mais empregos formais." },
+                { text: "Aumentar fiscalização e multas", correct: false, effect: { pib: -1, inflacao: +0.1, desemprego: +0.5, popularidade: -4 }, justification: "❌ Justificativa: Só aumentar multas sem reduzir custos pode levar ao fechamento de pequenos negócios e aumento do desemprego." },
+                { text: "Ignorar informalidade", correct: false, effect: { pib: -1, inflacao: 0, desemprego: 0, popularidade: -2 }, justification: "❌ Justificativa: Ignorar o problema permite que a informalidade cresça, reduzindo a arrecadação previdenciária e criando trabalhadores sem proteção social." }
+            ]
+        },
+        {
+            text: "💡 INOVAÇÃO TECNOLÓGICA",
+            context: "País atrasado em inovação. Como estimular?",
+            options: [
+                { text: "Crédito subsidiado para P&D e parcerias universidade-empresa", correct: true, effect: { pib: +3, inflacao: -0.1, desemprego: -0.3, popularidade: +2 }, justification: "✅ Justificativa: Investimento em pesquisa e desenvolvimento gera inovação, aumentando a produtividade e competitividade de longo prazo." },
+                { text: "Aumentar impostos para financiar estatais de tecnologia", correct: false, effect: { pib: -1, inflacao: +0.2, desemprego: 0, popularidade: -3 }, justification: "❌ Justificativa: Aumento de impostos para financiar estatais ineficientes pode gerar desperdício sem o retorno esperado em inovação." },
+                { text: "Isentar totalmente impostos de tecnologia", correct: false, effect: { pib: +1, inflacao: 0, desemprego: -0.1, popularidade: +1 }, justification: "❌ Justificativa: Isenção irrestrita sem contrapartidas pode gerar renúncia fiscal sem garantia de que os recursos serão investidos em inovação." }
+            ]
+        },
+        {
+            text: "🏘️ HABITAÇÃO POPULAR",
+            context: "Déficit habitacional de 6 milhões de moradias. Como agir?",
+            options: [
+                { text: "Programa com subsídios diretos e incentivo à construção privada", correct: true, effect: { pib: +2, inflacao: +0.2, desemprego: -0.8, popularidade: +5 }, justification: "✅ Justificativa: Subsídios diretos focalizados e parcerias com construtoras geram emprego na construção civil e reduzem o déficit habitacional com eficiência." },
+                { text: "Construir moradias populares pelo governo", correct: false, effect: { pib: +1, inflacao: +0.4, desemprego: -0.3, popularidade: +2 }, justification: "❌ Justificativa: Construção exclusivamente estatal tende a ser mais cara e lenta. O déficit é grande demais para ser resolvido apenas pelo setor público." },
+                { text: "Não interferir, deixar o mercado resolver", correct: false, effect: { pib: -1, inflacao: 0, desemprego: +0.2, popularidade: -8 }, justification: "❌ Justificativa: O mercado sozinho não resolve déficit habitacional de baixa renda. A população mais pobre precisa de políticas públicas focalizadas." }
+            ]
+        },
+        {
+            text: "🎯 POLÍTICA FISCAL",
+            context: "Dívida pública elevada. Como equilibrar contas?",
+            options: [
+                { text: "Corte de gastos ineficientes + reforma tributária neutra", correct: true, effect: { pib: +1, inflacao: -0.3, desemprego: 0, popularidade: 0 }, justification: "✅ Justificativa: Cortar desperdícios e simplificar impostos melhora a eficiência do gasto sem aumentar carga tributária. É a combinação mais equilibrada." },
+                { text: "Aumentar todos os impostos para reduzir déficit", correct: false, effect: { pib: -3, inflacao: +0.1, desemprego: +0.8, popularidade: -10 }, justification: "❌ Justificativa: Aumento generalizado de impostos desestimula investimento e consumo, podendo gerar recessão e queda de arrecadação." },
+                { text: "Cortar investimentos públicos e sociais", correct: false, effect: { pib: -2, inflacao: -0.1, desemprego: +0.4, popularidade: -12 }, justification: "❌ Justificativa: Cortar investimentos compromete o crescimento futuro. É um ajuste que penaliza desproporcionalmente os mais pobres e o desenvolvimento." }
             ]
         }
     ];
@@ -547,7 +654,7 @@
         updateIndicatorsUI();
     }
     
-    function showModal(title, explanation, isCorrect, effectDesc) {
+    function showModal(explanation, isCorrect, effectDesc) {
         const modal = document.getElementById("explanationModal");
         const modalTitle = document.getElementById("modalTitle");
         const modalExplanation = document.getElementById("modalExplanation");
@@ -592,13 +699,13 @@
             • Inflação: ${inflacaoFinal.toFixed(1)}% (sob controle)<br>
             • Desemprego: ${desempregoFinal.toFixed(1)}% (dentro da meta)<br>
             • Popularidade: ${Math.round(popularidadeFinal)}%<br><br>
-            <strong>📖 Análise econômica (baseada no livro Unifatecie):</strong><br>
-            Você aplicou com maestria os conceitos de política fiscal responsável (Unidade IV), entendeu a importância do equilíbrio entre gastos públicos e eficiência administrativa. Suas decisões sobre servidores públicos mostraram equilíbrio entre responsabilidade fiscal e justiça social. O país está em boas mãos!`;
+            <strong>📖 Análise:</strong><br>
+            Suas decisões demonstraram equilíbrio entre responsabilidade fiscal, estímulo ao crescimento e justiça social. O país está em boas mãos!`;
         } 
         else if (aproveitamento >= 50 && pibFinal >= 70 && popularidadeFinal >= 35) {
             status = "⚠️ MANDATO RENOVADO COM RESSALVAS ⚠️";
             corClass = "aprovado";
-            analise = `📋 O Presidente decidiu mantê-lo, mas exigirá mudanças na equipe econômica. Sua gestão teve altos e baixos.<br><br>
+            analise = `📋 O Presidente decidiu mantê-lo, mas exigirá mudanças na equipe econômica.<br><br>
             <strong>📊 Seus números finais:</strong><br>
             • Acertos: ${score}/${totalPossivel} (${Math.round(aproveitamento)}%)<br>
             • PIB: ${Math.round(pibFinal)}<br>
@@ -606,7 +713,7 @@
             • Desemprego: ${desempregoFinal.toFixed(1)}%<br>
             • Popularidade: ${Math.round(popularidadeFinal)}%<br><br>
             <strong>📖 Análise:</strong><br>
-            Você demonstrou conhecimento dos fundamentos econômicos, mas algumas decisões foram contestáveis. Conforme ensina o livro, a economia é a ciência da escassez e requer escolhas difíceis. Sua margem de manobra será reduzida no próximo mandato. Estude mais sobre políticas macroeconômicas para melhorar.`;
+            Você demonstrou conhecimento dos fundamentos econômicos, mas algumas decisões foram contestáveis. A economia é a ciência da escassez e requer escolhas difíceis. Estude mais sobre políticas macroeconômicas para melhorar.`;
         }
         else {
             status = "❌ MINISTRO DEMITIDO! ❌";
@@ -618,7 +725,7 @@
             else if (desempregoFinal > 15) motivo = "explosão do desemprego e recessão profunda";
             else motivo = "combinação de indicadores negativos e decisões inconsistentes";
             
-            analise = `😔 O Presidente aceitou sua carta de demissão (ou você foi convidado a se retirar).<br><br>
+            analise = `😔 O Presidente aceitou sua carta de demissão.<br><br>
             <strong>📊 Seus números finais:</strong><br>
             • Acertos: ${score}/${totalPossivel} (${Math.round(aproveitamento)}%)<br>
             • PIB: ${Math.round(pibFinal)}<br>
@@ -626,8 +733,8 @@
             • Desemprego: ${desempregoFinal.toFixed(1)}%<br>
             • Popularidade: ${Math.round(popularidadeFinal)}%<br><br>
             <strong>🔴 Motivo da demissão:</strong> ${motivo}<br><br>
-            <strong>📖 Lição do livro Unifatecie:</strong><br>
-            A economia não é uma ciência exata (Unidade II), mas decisões baseadas em teoria evitam desastres. Você cometeu erros graves ao ignorar princípios de política monetária, fiscal ou de gestão de servidores públicos. Estude os conceitos de escassez, oferta/demanda e políticas macroeconômicas para um próximo mandato mais bem-sucedido.`;
+            <strong>📖 Lição aprendida:</strong><br>
+            A economia não é uma ciência exata, mas decisões baseadas em teoria evitam desastres. Erros graves ao ignorar princípios de política monetária, fiscal ou de gestão pública levaram ao seu afastamento. Estude mais para um próximo mandato bem-sucedido.`;
         }
         
         document.getElementById("questionText").innerHTML = "🏁 FIM DO MANDATO 🏁";
@@ -679,7 +786,7 @@
                 
                 const effectDesc = `📈 PIB: ${opt.effect.pib >= 0 ? '+' : ''}${opt.effect.pib} | 🔥 Inflação: ${opt.effect.inflacao >= 0 ? '+' : ''}${opt.effect.inflacao}% | 👥 Desemprego: ${opt.effect.desemprego >= 0 ? '+' : ''}${opt.effect.desemprego}% | 👍 Popularidade: ${opt.effect.popularidade >= 0 ? '+' : ''}${opt.effect.popularidade}%`;
                 
-                showModal(isCorrect ? "Acertou!" : "Errou!", opt.explanation, isCorrect, effectDesc);
+                showModal(opt.justification, isCorrect, effectDesc);
                 
                 document.querySelectorAll(".option-btn").forEach(btn => {
                     btn.classList.add("disabled-option");
@@ -721,7 +828,6 @@
     }
     
     function startGame() {
-        // Resetar todos os valores
         currentQuestionIndex = 0;
         score = 0;
         answerLocked = false;
@@ -733,34 +839,23 @@
             popularidade: 55
         };
         
-        // Esconder tela de introdução e mostrar o jogo
         document.getElementById("introScreen").style.display = "none";
         document.getElementById("gameScreen").style.display = "block";
         
-        // Atualizar UI e carregar primeira pergunta
         updateIndicatorsUI();
         loadQuestion();
     }
     
-    // Configurar eventos
     document.getElementById("startGameBtn").addEventListener("click", startGame);
-    
     document.getElementById("closeModalBtn").addEventListener("click", () => {
         document.getElementById("explanationModal").style.display = "none";
     });
-    
     window.addEventListener("click", (e) => {
         const modal = document.getElementById("explanationModal");
-        if (e.target === modal) {
-            modal.style.display = "none";
-        }
+        if (e.target === modal) modal.style.display = "none";
     });
+    document.getElementById("resetBtn").addEventListener("click", resetGame);
     
-    document.getElementById("resetBtn").addEventListener("click", () => {
-        resetGame();
-    });
-    
-    // Pré-configurar o total de perguntas
     document.getElementById("totalQuestions").innerText = questions.length;
     updateIndicatorsUI();
 </script>
